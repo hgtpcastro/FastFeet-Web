@@ -24,7 +24,7 @@ export default function SignIn() {
 
   return (
     <>
-      <img src={logo} alt="Firstpharma" />
+      <img src={logo} alt="Logo FastFeet" />
       <Form schema={schema} onSubmit={handleSubmit}>
         <Input
           name="email"
