@@ -1,3 +1,4 @@
+import { darken } from 'polished';
 import { createGlobalStyle } from 'styled-components';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -40,6 +41,23 @@ html, body, #root {
 
   button {
     cursor: pointer;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #7D40E7;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${darken(0.08, '#7D40E7')};
   }
 }
 `;

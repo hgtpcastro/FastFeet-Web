@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -29,7 +29,7 @@ export default function Default({ children }) {
               </StyledLink>
             </li>
             <li>
-              <StyledLink aactiveClassName="active" to="/deliverymans">
+              <StyledLink activeClassName="active" to="/deliverymans">
                 Entregadores
               </StyledLink>
             </li>
@@ -47,7 +47,7 @@ export default function Default({ children }) {
         </Left>
         <Right>
           <strong>Admin FastFeet</strong>
-          <NavLink to="/">sair do sistema</NavLink>
+          <Link to="/">sair do sistema</Link>
         </Right>
       </Header>
 

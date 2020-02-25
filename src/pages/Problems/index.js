@@ -1,7 +1,19 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import PropTypes from 'prop-types';
 
-export default function Problems() {
-  return <h1>Problems</h1>;
+import { Wrapper } from '~/styles/wrapper';
+
+import Routes from './routes';
+
+export default function Problem({ match }) {
+  return (
+    <Wrapper>
+      <Routes path={match.path} />
+    </Wrapper>
+  );
 }
+
+Problem.propTypes = {
+  match: PropTypes.shape().isRequired,
+};
