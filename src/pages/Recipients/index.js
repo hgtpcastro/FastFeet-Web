@@ -2,18 +2,16 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { Wrapper } from '~/styles/wrapper';
-
 import Routes from './routes';
 
-export default function Recipient({ match }) {
+export default function Reports({ match }) {
   return (
-    <Wrapper>
+    <>
       <Routes path={match.path} />
-    </Wrapper>
+    </>
   );
 }
 
-Recipient.propTypes = {
+Reports.propTypes = {
   match: PropTypes.shape().isRequired,
 };

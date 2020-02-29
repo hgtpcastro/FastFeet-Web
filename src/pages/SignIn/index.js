@@ -1,47 +1,42 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import { Form } from '@unform/web';
-import * as Yup from 'yup';
 
-import logo from '~/assets/fastfeet.svg';
-import Input from '~/components/Input';
+import Logo from '~/assets/fastfeet.svg';
+import { ButtonBasic } from '~/components/UIElements/Buttons';
+import { InputSimple } from '~/components/UIElements/Inputs';
+import { signInRequest } from '~/store/modules/auth/actions';
 
-const schema = Yup.object().shape({
-  email: Yup.string()
-    .email('Insira um email válido')
-    .required('O email é obrigatório'),
-  password: Yup.string().required('O password é obrigatória'),
-});
+export default function SingIn() {
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
 
-export default function SignIn() {
-  const formRef = useRef(null);
-
-  const loading = false;
-
-  function handleSubmit({ email, password }) {}
+  function handleSubmit({ email, password }) {
+    dispatch(signInRequest(email, password));
+  }
 
   return (
     <>
-      <img src={logo} alt="Logo FastFeet" />
-      <Form schema={schema} onSubmit={handleSubmit}>
-        <Input
+      <img src={Logo} alt="FastFeet" />
+
+      <Form onSubmit={handleSubmit}>
+        <InputSimple
           name="email"
+          label="SEU E-MAIL"
           type="email"
-          label="Seu e-mail"
           placeholder="exemplo@email.com"
         />
-        <Input
+        <InputSimple
           name="password"
+          label="SUA SENHA"
           type="password"
-          label="Seu password"
-          placeholder="********"
+          placeholder="*************"
         />
 
-        <button type="submit">
-          {loading ? 'Carregando...' : 'Entrar no sistema'}
-        </button>
+        <ButtonBasic type="submit">
+          {loading ? 'Carregando...' : 'Acessar'}
+        </ButtonBasic>
       </Form>
     </>
   );

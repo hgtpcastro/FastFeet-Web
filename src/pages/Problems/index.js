@@ -1,19 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import PropTypes from 'prop-types';
+import HeaderList from '~/components/UIElements/Headers/List';
+import api from '~/services/api';
 
-import { Wrapper } from '~/styles/wrapper';
+import ProblemItem from './components/ProblemItem';
+import { Container, Content, Grid, Button } from './styles';
 
-import Routes from './routes';
+export default function Problems() {
+  const [page, setPage] = useState(1);
+  const [problems, setProblems] = useState([]);
 
-export default function Problem({ match }) {
+  const loadProblems = useCallback(async () => {
+    const response = await api.get('/delivery/problems', {
+      params: {
+        page,
+      },
+    });
+    setProblems(response.data);
+  }, [page]);
+
+  useEffect(() => {
+    loadProblems();
+  }, [loadProblems]);
+
   return (
-    <Wrapper>
-      <Routes path={match.path} />
-    </Wrapper>
+    <Container>
+      <Content>
+        <HeaderList title="Problemas na entrega" />
+        <Grid>
+          <section>
+            <strong>Encomenda</strong>
+            <strong>Problema</strong>
+            <strong>Ações</strong>
+          </section>
+          {problems.map(problem => (
+            <ProblemItem
+              updateProblems={loadProblems}
+              key={problem.id}
+              data={problem}
+            />
+          ))}
+        </Grid>
+        <section>
+          <Button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            type="button"
+          >
+            Voltar
+          </Button>
+          <Button
+            disabled={problems.length < 5}
+            type="button"
+            onClick={() => setPage(page + 1)}
+          >
+            Próximo
+          </Button>
+        </section>
+      </Content>
+    </Container>
   );
 }
-
-Problem.propTypes = {
-  match: PropTypes.shape().isRequired,
-};
