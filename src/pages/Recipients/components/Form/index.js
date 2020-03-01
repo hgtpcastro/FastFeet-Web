@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import * as Yup from 'yup';
 
-import { ButtonSave, ButtonBack } from '~/components/UIElements/Buttons';
-import { InputSimple, InputMask } from '~/components/UIElements/Inputs';
-import HeaderForm from '~/components/UIElements/Headers/Form';
+import { ButtonSave, ButtonBack } from '~/components/Shared/Buttons';
+import { InputSimple, InputMask } from '~/components/Shared/Inputs';
+import HeaderForm from '~/components/Shared/Headers/Form';
 import api from '~/services/api';
 import history from '~/services/history';
 

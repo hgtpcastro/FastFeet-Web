@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import HeaderList from '~/components/UIElements/Headers/List';
+import HeaderList from '~/components/Shared/Headers/List';
 import api from '~/services/api';
 
 import ProblemItem from './components/ProblemItem';

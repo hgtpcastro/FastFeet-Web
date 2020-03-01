@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form } from '@unform/web';
 
 import Logo from '~/assets/fastfeet.svg';
-import { ButtonBasic } from '~/components/UIElements/Buttons';
-import { InputSimple } from '~/components/UIElements/Inputs';
+import { ButtonBasic } from '~/components/Shared/Buttons';
+import { InputSimple } from '~/components/Shared/Inputs';
 import { signInRequest } from '~/store/modules/auth/actions';
 
 export default function SingIn() {

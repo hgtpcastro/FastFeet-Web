@@ -1,7 +1,7 @@
 import { lighten } from 'polished';
 import styled from 'styled-components';
 
-import { ButtonBasic } from '~/components/UIElements/Buttons';
+import { ButtonBasic } from '~/components/Shared/Buttons';
 
 export const Container = styled.div`
   display: flex;

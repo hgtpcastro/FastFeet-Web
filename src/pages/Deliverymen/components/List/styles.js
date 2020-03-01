@@ -1,6 +1,7 @@
+import { lighten } from 'polished';
 import styled from 'styled-components';
 
-import { ButtonBasic } from '~/components/UIElements/Buttons';
+import { ButtonBasic } from '~/components/Shared/Buttons';
 
 export const Container = styled.div`
   display: flex;
@@ -21,6 +22,7 @@ export const Content = styled.div`
 
 export const Grid = styled.div`
   height: 400px;
+
   > section {
     display: grid;
     grid-template-columns: 1.2fr 1.1fr 2fr 2fr 1fr;
@@ -47,9 +49,10 @@ export const Grid = styled.div`
 export const Button = styled(ButtonBasic)`
   width: 100px;
   height: 36px;
+  background: #7d40e7;
 
   &:disabled {
     cursor: not-allowed;
-    background: #666;
+    background: ${lighten(0.2, '#7D40E7')};
   }
 `;

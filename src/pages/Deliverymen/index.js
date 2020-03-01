@@ -1,7 +1,17 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import PropTypes from 'prop-types';
 
-export default function Deliverymen() {
-  return <h1>Deliverymen</h1>;
+import Routes from './routes';
+
+export default function Deliverymen({ match }) {
+  return (
+    <>
+      <Routes path={match.path} />
+    </>
+  );
 }
+
+Deliverymen.propTypes = {
+  match: PropTypes.shape().isRequired,
+};

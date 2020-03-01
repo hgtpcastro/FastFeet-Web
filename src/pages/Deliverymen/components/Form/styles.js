@@ -16,7 +16,6 @@ export const UnForm = styled(Form)`
   flex-direction: column;
   padding: 30px;
   background: #fff;
-
   width: 100%;
   border-radius: 4px;
 `;

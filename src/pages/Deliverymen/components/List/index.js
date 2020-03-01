@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 
 import NoResults from '~/components/NoResults';
@@ -7,64 +7,66 @@ import HeaderList from '~/components/Shared/Headers/List';
 import { InputSearch } from '~/components/Shared/Inputs';
 import api from '~/services/api';
 
-import RecipientItem from '../RecipientItem';
+import DeliverymenItem from '../DeliverymenItem';
 import { Container, Content, Grid, Button } from './styles';
 
-export default function Recipients() {
+export default function Deliverymen() {
+  const [deliverymen, setDeliverymen] = useState([]);
   const [page, setPage] = useState(1);
-  const [recipients, setRecipients] = useState([]);
 
-  const loadRecipients = useCallback(async () => {
-    const response = await api.get('/recipient', {
+  const loadDeliverymen = useCallback(async () => {
+    const response = await api.get('/deliveryman', {
       params: {
         page,
       },
     });
 
-    setRecipients(response.data);
+    setDeliverymen(response.data);
   }, [page]);
 
-  async function handleSearchRecipient(e) {
+  useEffect(() => {
+    loadDeliverymen();
+  }, [loadDeliverymen, page]);
+
+  async function handleSearchDeliveryman(e) {
     setPage(1);
 
-    const response = await api.get('/recipient', {
+    const response = await api.get('/deliveryman', {
       params: {
-        page,
         q: e.target.value,
+        page,
       },
     });
 
-    setRecipients(response.data);
+    setDeliverymen(response.data);
   }
-
-  useEffect(() => {
-    loadRecipients();
-  }, [loadRecipients, page]);
 
   return (
     <Container>
       <Content>
-        <HeaderList title="Gerenciando destinatários">
+        <HeaderList title="Gerenciando entregadores">
           <InputSearch
-            onChange={handleSearchRecipient}
+            onChange={handleSearchDeliveryman}
             type="text"
-            placeholder="Buscar por destinatários"
+            placeholder="Buscar por entregadores"
           />
           <ButtonNavigation url="add" Icon={MdAdd} title="Cadastrar" />
         </HeaderList>
+
         <Grid>
           <section>
             <strong>ID</strong>
+            <strong>Foto</strong>
             <strong>Nome</strong>
-            <strong>Endereço</strong>
+            <strong>Email</strong>
             <strong>Ações</strong>
           </section>
-          {recipients.length === 0 && <NoResults />}
-          {recipients.map(recipient => (
-            <RecipientItem
-              updateRecipients={loadRecipients}
-              key={recipient.id}
-              data={recipient}
+          {deliverymen.length === 0 && <NoResults />}
+          {deliverymen.map(deliveryman => (
+            <DeliverymenItem
+              key={deliveryman.id}
+              data={deliveryman}
+              updateDeliverymen={loadDeliverymen}
             />
           ))}
         </Grid>
@@ -77,7 +79,7 @@ export default function Recipients() {
             Voltar
           </Button>
           <Button
-            disabled={recipients.length < 5}
+            disabled={deliverymen.length < 5}
             type="button"
             onClick={() => setPage(page + 1)}
           >

@@ -3,9 +3,9 @@ import { MdAdd } from 'react-icons/md';
 
 import { parseISO, format } from 'date-fns';
 
-import { ButtonWithIcon } from '~/components/UIElements/Buttons';
-import HeaderList from '~/components/UIElements/Headers/List';
-import { InputSearch } from '~/components/UIElements/Inputs';
+import { ButtonWithIcon } from '~/components/Shared/Buttons';
+import HeaderList from '~/components/Shared/Headers/List';
+import { InputSearch } from '~/components/Shared/Inputs';
 import api from '~/services/api';
 import history from '~/services/history';
 

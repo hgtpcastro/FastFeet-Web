@@ -1,24 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 
-import { ButtonSave, ButtonBack } from '~/components/UIElements/Buttons';
-import { SimpleInput, PhotoInput } from '~/components/Form';
-import HeaderForm from '~/components/HeaderForm';
+import { ButtonSave, ButtonBack } from '~/components/Shared/Buttons';
+
+import { InputSimple, InputPhoto } from '~/components/Shared/Inputs';
+import HeaderForm from '~/components/Shared/Headers/Form';
 import api from '~/services/api';
 
 import { Container, Content, UnForm } from './styles';
 
-export default function DeliverymanForm({ match }) {
-  const { id } = match.params;
+export default function DeliverymanForm() {
+  const { id } = useParams();
   const formRef = useRef(null);
 
   useEffect(() => {
-    async function loadInitialData(deliverymanId) {
+    async function loadInitialData() {
       if (id) {
-        const response = await api.get(`/deliverymen/${deliverymanId}`);
+        const response = await api.get(`/deliveryman/${id}`);
 
         formRef.current.setData(response.data);
         formRef.current.setFieldValue('avatar', response?.data?.avatar?.url);
@@ -48,14 +49,14 @@ export default function DeliverymanForm({ match }) {
         : null;
 
       if (id) {
-        await api.put(`/deliverymen/${id}`, {
+        await api.put(`/deliveryman/${id}`, {
           name: data.name,
           email: data.email,
           avatar_id: responseFile?.data?.id,
         });
         toast.success('Entregador editado com sucesso!');
       } else {
-        await api.post('/deliverymen', {
+        await api.post('/deliveryman', {
           name: data.name,
           email: data.email,
           avatar_id: responseFile?.data?.id,
@@ -86,32 +87,21 @@ export default function DeliverymanForm({ match }) {
         </HeaderForm>
 
         <UnForm ref={formRef} onSubmit={handleSubmit}>
-          <PhotoInput name="avatar" />
-          <SimpleInput
+          <InputPhoto name="avatar" />
+          <InputSimple
             label="Nome"
             name="name"
             type="text"
             placeholder="Nome do entregador"
           />
-          <SimpleInput
+          <InputSimple
             label="Email"
             name="email"
             type="email"
             placeholder="exemplo@fastfeet.com"
-            onKeyPress={e =>
-              e.key === 'Enter' ? formRef.current.submitForm() : null
-            }
           />
         </UnForm>
       </Content>
     </Container>
   );
 }
-
-DeliverymanForm.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};

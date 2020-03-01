@@ -4,30 +4,30 @@ import { toast } from 'react-toastify';
 
 import PropTypes from 'prop-types';
 
-import More from '~/components/MenuActions';
+import Alert from '~/components/Alerts/Delete';
+import MenuActions from '~/components/MenuActions';
 import NamePhoto from '~/components/NameOrPhoto';
+import { ButtonEdit } from '~/components/Shared/Buttons';
 import api from '~/services/api';
 import history from '~/services/history';
 import { colors } from '~/styles/colors';
 
-import { Container, MoreConainer } from './styles';
+import { Container, MenuActionsContainer } from './styles';
 
 export default function DeliverymanItem({ data, updateDeliverymen }) {
   async function handleDelete() {
-    const confirm = window.confirm('Você tem certeza que deseja deletar isso?');
-
-    if (!confirm) {
-      toast.error('Encomenda não apagada!');
-      return;
-    }
-
-    try {
-      await api.delete(`/deliverymen/${data.id}`);
-      updateDeliverymen();
-      toast.success('Entregador apagado com sucesso!');
-    } catch (err) {
-      toast.error('Esse entregador ainda possui encomendas para entregar!');
-    }
+    Alert.delete().then(result => {
+      if (result.value) {
+        try {
+          api.delete(`/deliveryman/${data.id}`);
+          updateDeliverymen();
+          toast.success('Entregador apagado com sucesso!');
+          history.push('/deliverymen');
+        } catch (err) {
+          toast.error('Esse entregador ainda possui encomendas para entregar!');
+        }
+      }
+    });
   }
 
   return (
@@ -40,25 +40,22 @@ export default function DeliverymanItem({ data, updateDeliverymen }) {
       )}
       <small>{data.name}</small>
       <small>{data.email}</small>
-      <More>
-        <MoreConainer>
-          <div>
-            <button
-              onClick={() => history.push(`/deliverymen/form/${data.id}`)}
-              type="button"
-            >
-              <MdEdit color={colors.info} size={15} />
-              <span>Editar</span>
-            </button>
-          </div>
+      <MenuActions>
+        <MenuActionsContainer>
+          <ButtonEdit
+            color={colors.info}
+            url={`edit/${data.id}`}
+            Icon={MdEdit}
+            title="Editar"
+          />
           <div>
             <button onClick={handleDelete} type="button">
               <MdDeleteForever color={colors.danger} size={15} />
               <span>Excluir</span>
             </button>
           </div>
-        </MoreConainer>
-      </More>
+        </MenuActionsContainer>
+      </MenuActions>
     </Container>
   );
 }

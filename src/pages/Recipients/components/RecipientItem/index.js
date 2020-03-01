@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import Alert from '~/components/Alerts/Delete';
 import MenuActions from '~/components/MenuActions';
-import { ButtonEdit } from '~/components/UIElements/Buttons';
+import { ButtonEdit } from '~/components/Shared/Buttons';
 import api from '~/services/api';
 import history from '~/services/history';
 import { colors } from '~/styles/colors';
