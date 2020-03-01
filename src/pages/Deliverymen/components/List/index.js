@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 
+import Loading from '~/components/Loading';
 import NoResults from '~/components/NoResults';
 import { ButtonNavigation } from '~/components/Shared/Buttons';
 import HeaderList from '~/components/Shared/Headers/List';
@@ -13,8 +14,10 @@ import { Container, Content, Grid, Button } from './styles';
 export default function Deliverymen() {
   const [deliverymen, setDeliverymen] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const loadDeliverymen = useCallback(async () => {
+    setLoading(true);
     const response = await api.get('/deliveryman', {
       params: {
         page,
@@ -22,6 +25,7 @@ export default function Deliverymen() {
     });
 
     setDeliverymen(response.data);
+    setLoading(false);
   }, [page]);
 
   useEffect(() => {
@@ -29,6 +33,7 @@ export default function Deliverymen() {
   }, [loadDeliverymen, page]);
 
   async function handleSearchDeliveryman(e) {
+    setLoading(true);
     setPage(1);
 
     const response = await api.get('/deliveryman', {
@@ -39,6 +44,7 @@ export default function Deliverymen() {
     });
 
     setDeliverymen(response.data);
+    setLoading(false);
   }
 
   return (
@@ -61,7 +67,10 @@ export default function Deliverymen() {
             <strong>Email</strong>
             <strong>Ações</strong>
           </section>
+          {loading && <Loading />}
+
           {deliverymen.length === 0 && <NoResults />}
+
           {deliverymen.map(deliveryman => (
             <DeliverymenItem
               key={deliveryman.id}

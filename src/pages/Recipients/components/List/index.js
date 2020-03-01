@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 
+import Loading from '~/components/Loading';
 import NoResults from '~/components/NoResults';
 import { ButtonNavigation } from '~/components/Shared/Buttons';
 import HeaderList from '~/components/Shared/Headers/List';
@@ -13,8 +14,11 @@ import { Container, Content, Grid, Button } from './styles';
 export default function Recipients() {
   const [page, setPage] = useState(1);
   const [recipients, setRecipients] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const loadRecipients = useCallback(async () => {
+    setLoading(true);
+
     const response = await api.get('/recipient', {
       params: {
         page,
@@ -22,9 +26,11 @@ export default function Recipients() {
     });
 
     setRecipients(response.data);
+    setLoading(false);
   }, [page]);
 
   async function handleSearchRecipient(e) {
+    setLoading(true);
     setPage(1);
 
     const response = await api.get('/recipient', {
@@ -35,6 +41,7 @@ export default function Recipients() {
     });
 
     setRecipients(response.data);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -59,7 +66,11 @@ export default function Recipients() {
             <strong>Endereço</strong>
             <strong>Ações</strong>
           </section>
+
+          {loading && <Loading />}
+
           {recipients.length === 0 && <NoResults />}
+
           {recipients.map(recipient => (
             <RecipientItem
               updateRecipients={loadRecipients}

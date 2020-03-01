@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+import Loading from '~/components/Loading';
 import HeaderList from '~/components/Shared/Headers/List';
 import api from '~/services/api';
 
@@ -9,14 +10,18 @@ import { Container, Content, Grid, Button } from './styles';
 export default function Problems() {
   const [page, setPage] = useState(1);
   const [problems, setProblems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const loadProblems = useCallback(async () => {
+    setLoading(true);
+
     const response = await api.get('/delivery/problems', {
       params: {
         page,
       },
     });
     setProblems(response.data);
+    setLoading(false);
   }, [page]);
 
   useEffect(() => {
@@ -33,6 +38,9 @@ export default function Problems() {
             <strong>Problema</strong>
             <strong>Ações</strong>
           </section>
+
+          {loading && <Loading />}
+
           {problems.map(problem => (
             <ProblemItem
               updateProblems={loadProblems}
