@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Loading from '~/components/Loading';
+import NoResults from '~/components/NoResults';
 import HeaderList from '~/components/Shared/Headers/List';
 import api from '~/services/api';
 
@@ -15,7 +16,7 @@ export default function Problems() {
   const loadProblems = useCallback(async () => {
     setLoading(true);
 
-    const response = await api.get('/delivery/problems', {
+    const response = await api.get('/deliveries/problems', {
       params: {
         page,
       },
@@ -40,6 +41,8 @@ export default function Problems() {
           </section>
 
           {loading && <Loading />}
+
+          {problems.length === 0 && <NoResults />}
 
           {problems.map(problem => (
             <ProblemItem

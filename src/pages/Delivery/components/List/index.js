@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 
 import { parseISO, format } from 'date-fns';
 
-import { ButtonWithIcon } from '~/components/Shared/Buttons';
+import Loading from '~/components/Loading';
+import NoResults from '~/components/NoResults';
+import { ButtonNavigation } from '~/components/Shared/Buttons';
 import HeaderList from '~/components/Shared/Headers/List';
 import { InputSearch } from '~/components/Shared/Inputs';
 import api from '~/services/api';
-import history from '~/services/history';
 
-import DeliveryItem from './components/DeliveryItem';
+import DeliveryItem from '../DeliveryItem';
 import { Container, Content, Grid, Button } from './styles';
 
 export default function Delivery() {
   const [deliveries, setDeliveries] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   function formatDates(data) {
     return data.map(delivery => ({
@@ -28,9 +30,26 @@ export default function Delivery() {
     }));
   }
 
+  const loadDeliveries = useCallback(async () => {
+    setLoading(true);
+
+    const response = await api.get('/delivery', {
+      params: {
+        page,
+      },
+    });
+
+    const data = formatDates(response.data);
+
+    setDeliveries(data);
+    setLoading(false);
+  }, [page]);
+
   async function handleSearchDelivery(e) {
+    setLoading(true);
     setPage(1);
-    const response = await api.get('/deliveries', {
+
+    const response = await api.get('/delivery', {
       params: {
         q: e.target.value,
         page,
@@ -40,23 +59,12 @@ export default function Delivery() {
     const data = formatDates(response.data);
 
     setDeliveries(data);
-  }
-
-  async function loadDeliveries() {
-    const response = await api.get('/deliveries', {
-      params: {
-        page,
-      },
-    });
-
-    const data = formatDates(response.data);
-
-    setDeliveries(data);
+    setLoading(false);
   }
 
   useEffect(() => {
     loadDeliveries();
-  }, [page]); //eslint-disable-line
+  }, [loadDeliveries, page]);
 
   return (
     <Container>
@@ -67,12 +75,7 @@ export default function Delivery() {
             type="text"
             placeholder="Buscar por encomendas"
           />
-          <ButtonWithIcon
-            Icon={MdAdd}
-            title="CADASTRAR"
-            action={() => history.push('/deliveries/form')}
-            type="button"
-          />
+          <ButtonNavigation url="add" Icon={MdAdd} title="Cadastrar" />
         </HeaderList>
 
         <Grid>
@@ -85,6 +88,11 @@ export default function Delivery() {
             <strong>Status</strong>
             <strong>Ações</strong>
           </section>
+
+          {loading && <Loading />}
+
+          {deliveries.length === 0 && <NoResults />}
+
           {deliveries.map(delivery => (
             <DeliveryItem
               updateDeliveries={loadDeliveries}
@@ -99,14 +107,14 @@ export default function Delivery() {
             onClick={() => setPage(page - 1)}
             type="button"
           >
-            voltar
+            Voltar
           </Button>
           <Button
             disabled={deliveries.length < 5}
             type="button"
             onClick={() => setPage(page + 1)}
           >
-            proximo
+            Próximo
           </Button>
         </section>
       </Content>

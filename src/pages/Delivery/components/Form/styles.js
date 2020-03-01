@@ -16,14 +16,12 @@ export const UnForm = styled(Form)`
   flex-direction: column;
   padding: 25px 30px;
   background: #fff;
-
   width: 100%;
   border-radius: 4px;
 
   > section {
     display: flex;
     justify-content: space-evenly;
-
     margin-bottom: 16px;
 
     > div:first-child {

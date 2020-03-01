@@ -1,25 +1,26 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 
-import { SaveButton, BackButton } from '~/components/Button';
-import { AsyncSelectInput, SimpleInput } from '~/components/Form';
-import HeaderForm from '~/components/HeaderForm';
+import { ButtonSave, ButtonBack } from '~/components/Shared/Buttons';
+import HeaderForm from '~/components/Shared/Headers/Form';
+import { InputSimple } from '~/components/Shared/Inputs';
+import Select from '~/components/Shared/Select';
 import api from '~/services/api';
 import history from '~/services/history';
 
 import { Container, Content, UnForm } from './styles';
 
-export default function DeliveryForm({ match }) {
-  const { id } = match.params;
+export default function DeliveryForm() {
+  const { id } = useParams();
   const formRef = useRef(null);
 
   useEffect(() => {
     async function loadInitialData(deliveryId) {
       if (id) {
-        const response = await api.get(`/deliveries/${deliveryId}`);
+        const response = await api.get(`/delivery/${deliveryId}`);
 
         formRef.current.setData(response.data);
         formRef.current.setFieldValue('recipient_id', {
@@ -42,8 +43,8 @@ export default function DeliveryForm({ match }) {
     }),
   };
 
-  async function loadRecipientOptions(inputValue, callback) {
-    const response = await api.get('/recipients', {
+  const loadRecipientOptions = useCallback(async inputValue => {
+    const response = await api.get('/recipient', {
       params: {
         q: inputValue,
       },
@@ -54,11 +55,11 @@ export default function DeliveryForm({ match }) {
       label: recipient.name,
     }));
 
-    callback(data);
-  }
+    return data;
+  }, []);
 
-  async function loadDeliverymenOptrios(inputValue, callback) {
-    const response = await api.get('/deliverymen', {
+  const loadDeliverymenOptions = useCallback(async inputValue => {
+    const response = await api.get('/deliveryman', {
       params: {
         q: inputValue,
       },
@@ -69,11 +70,12 @@ export default function DeliveryForm({ match }) {
       label: deliveryman.name,
     }));
 
-    callback(data);
-  }
+    return data;
+  }, []);
 
   async function handleSubmit(data, { reset }) {
     formRef.current.setErrors({});
+
     try {
       const schema = Yup.object().shape({
         product: Yup.string().required('O nome do produto é obrigatório'),
@@ -86,7 +88,7 @@ export default function DeliveryForm({ match }) {
       });
 
       if (id) {
-        await api.put(`/deliveries/${id}`, {
+        await api.put(`/delivery/${id}`, {
           product: data.product,
           recipient_id: data.recipient_id,
           deliveryman_id: data.deliveryman_id,
@@ -94,7 +96,7 @@ export default function DeliveryForm({ match }) {
         history.push('/deliveries');
         toast.success('Encomenda editada com sucesso!');
       } else {
-        await api.post('/deliveries', {
+        await api.post('/delivery', {
           product: data.product,
           recipient_id: data.recipient_id,
           deliveryman_id: data.deliveryman_id,
@@ -120,13 +122,13 @@ export default function DeliveryForm({ match }) {
     <Container>
       <Content>
         <HeaderForm title="Cadastro de encomendas">
-          <BackButton />
-          <SaveButton action={() => formRef.current.submitForm()} />
+          <ButtonBack />
+          <ButtonSave action={() => formRef.current.submitForm()} />
         </HeaderForm>
 
         <UnForm ref={formRef} onSubmit={handleSubmit}>
           <section>
-            <AsyncSelectInput
+            <Select
               type="text"
               label="Destinatário"
               name="recipient_id"
@@ -135,35 +137,24 @@ export default function DeliveryForm({ match }) {
               loadOptions={loadRecipientOptions}
               styles={customStylesSelectInput}
             />
-            <AsyncSelectInput
+            <Select
               type="text"
               label="Entregador"
               name="deliveryman_id"
               placeholder="Entregadores"
               noOptionsMessage={() => 'Nenhum entregador encontrado'}
-              loadOptions={loadDeliverymenOptrios}
+              loadOptions={loadDeliverymenOptions}
               styles={customStylesSelectInput}
             />
           </section>
-          <SimpleInput
+          <InputSimple
             label="Nome do produto"
             name="product"
             type="text"
             placeholder="Nome do produto"
-            onKeyPress={e =>
-              e.key === 'Enter' ? formRef.current.submitForm() : null
-            }
           />
         </UnForm>
       </Content>
     </Container>
   );
 }
-
-DeliveryForm.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};

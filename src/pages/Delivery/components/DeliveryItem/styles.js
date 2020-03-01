@@ -27,7 +27,7 @@ export const Container = styled.div`
   }
 `;
 
-export const MoreConainer = styled.div`
+export const MenuActionsContainer = styled.div`
   padding: 10px;
 
   > div {

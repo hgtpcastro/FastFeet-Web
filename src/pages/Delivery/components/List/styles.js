@@ -1,3 +1,4 @@
+import { lighten } from 'polished';
 import styled from 'styled-components';
 
 import { ButtonBasic } from '~/components/Shared/Buttons';
@@ -47,9 +48,10 @@ export const Grid = styled.div`
 export const Button = styled(ButtonBasic)`
   width: 100px;
   height: 36px;
+  background: #7d40e7;
 
   &:disabled {
     cursor: not-allowed;
-    background: #666;
+    background: ${lighten(0.2, '#7D40E7')};
   }
 `;

@@ -5,19 +5,19 @@ export const colors = {
 };
 
 export const statusColors = {
-  PENDENTE: {
+  Pendente: {
     color: '#C1BC35',
     background: '#F0F0DF',
   },
-  RETIRADA: {
+  Retirada: {
     color: '#4D85EE',
     background: '#BAD2FF',
   },
-  ENTREGUE: {
+  Entregue: {
     color: '#2CA42B',
     background: '#DFF0DF',
   },
-  CANCELADA: {
+  Cancelada: {
     color: '#DE3B3B',
     background: '#FAB0B0',
   },
