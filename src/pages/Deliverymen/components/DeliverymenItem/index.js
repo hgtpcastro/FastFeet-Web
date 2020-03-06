@@ -19,7 +19,7 @@ export default function DeliverymanItem({ data, updateDeliverymen }) {
     Alert.delete().then(result => {
       if (result.value) {
         try {
-          api.delete(`/deliveryman/${data.id}`);
+          api.delete(`/deliverymen/${data.id}`);
           updateDeliverymen();
           toast.success('Entregador apagado com sucesso!');
           history.push('/deliverymen');

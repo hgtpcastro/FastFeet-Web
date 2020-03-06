@@ -18,7 +18,7 @@ export default function Deliverymen() {
 
   const loadDeliverymen = useCallback(async () => {
     setLoading(true);
-    const response = await api.get('/deliveryman', {
+    const response = await api.get('/deliverymen', {
       params: {
         page,
       },
@@ -36,7 +36,7 @@ export default function Deliverymen() {
     setLoading(true);
     setPage(1);
 
-    const response = await api.get('/deliveryman', {
+    const response = await api.get('/deliverymen', {
       params: {
         q: e.target.value,
         page,

@@ -19,7 +19,7 @@ export default function DeliverymanForm() {
   useEffect(() => {
     async function loadInitialData() {
       if (id) {
-        const response = await api.get(`/deliveryman/${id}`);
+        const response = await api.get(`/deliverymen/${id}`);
 
         formRef.current.setData(response.data);
         formRef.current.setFieldValue('avatar', response?.data?.avatar?.url);
@@ -49,14 +49,14 @@ export default function DeliverymanForm() {
         : null;
 
       if (id) {
-        await api.put(`/deliveryman/${id}`, {
+        await api.put(`/deliverymen/${id}`, {
           name: data.name,
           email: data.email,
           avatar_id: responseFile?.data?.id,
         });
         toast.success('Entregador editado com sucesso!');
       } else {
-        await api.post('/deliveryman', {
+        await api.post('/deliverymen', {
           name: data.name,
           email: data.email,
           avatar_id: responseFile?.data?.id,
