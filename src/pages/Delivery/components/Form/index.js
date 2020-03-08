@@ -59,7 +59,7 @@ export default function DeliveryForm() {
   }, []);
 
   const loadDeliverymenOptions = useCallback(async inputValue => {
-    const response = await api.get('/deliveryman', {
+    const response = await api.get('/deliverymen', {
       params: {
         q: inputValue,
       },
